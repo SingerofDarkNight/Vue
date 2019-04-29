@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
-import Manage from './views/Manage'
-import AddGame from './views/AddGame'
+import Manage from './views/Manage.vue'
+import AddGame from './views/AddGame.vue'
 
 Vue.use(Router)
 

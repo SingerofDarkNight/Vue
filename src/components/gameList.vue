@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="btn-group">
-            <div class="bo-n">BO100</div>
+            <div class="bo-n">{{game.name}}</div>
             <div style="width:80%">
                 <Button type="error" long>预测</Button>
             </div>
@@ -48,10 +48,24 @@
     </div>
 </template>
 
-<script>
-export default {
-    
-}
+<script lang="ts">
+	import Vue from "vue";
+  import { Component, Prop} from 'vue-property-decorator'
+  import {Game} from "@/proto/bbuhot/service/game_pb";
+
+	@Component
+  export default class GameList extends Vue {
+    @Prop({}) game!: Game;
+
+    loadGame() {
+      let time = this.game.getEndTimeMs();
+      console.log(time)
+    }
+
+    mounted() {
+      this.loadGame();
+    }
+  }
 </script>
 
 <style>

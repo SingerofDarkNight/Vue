@@ -1,37 +1,54 @@
 <template>
-  <div class="about">
-    <div>
-      <div class="content-bg">
-        <div class="content-pic-font"></div>
-        <headPic></headPic>
-      </div>
-      <div class="content-game-title">
-        <div class="coming-game"></div>
-      </div>
-      <div class="game-content">
-        <gameList></gameList>
-      </div>
-    </div>
-  </div>
+	<div class="about">
+		<div>
+			<div class="content-bg">
+				<div class="content-pic-font"></div>
+				<headPic></headPic>
+			</div>
+			<div class="content-game-title">
+				<div class="coming-game"></div>
+			</div>
+			<div class="game-content" v-for="game in listReplay.gamesList" :key="game.id">
+				<gameList :game="game"></gameList>
+			</div>
+		</div>
+	</div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import headPic from '../components/headPic.vue';
+  import gameList from '../components/gameList.vue';
+  import {ApiService} from "@/common/api.service";
+  import {ListGameRequest, ListGameReply, Game} from '@/proto/bbuhot/service/game_pb'
 
-import headPic from '../components/headPic.vue';
-import gameList from '../components/gameList.vue';
-import '../common/testing';
-
-export default {
-  components: {
-    headPic,
-    gameList
-  },
-  name: 'home',
-  data() {
-    return {
+  @Component({
+    components: {
+      headPic,
+      gameList
     }
-  },
-}
+  })
+
+  export default class Home extends Vue {
+
+    listReplay: any = new ListGameReply().toObject();
+
+    listRequest() {
+      const listGameRequest = new ListGameRequest();
+      listGameRequest.setGameStatus(Game.Status.PUBLISHED);
+      ApiService.listGame(listGameRequest).then(
+          ListGameReply => {
+            console.log('wtf', ListGameReply.toObject());
+            this.listReplay = ListGameReply.toObject();
+          }
+      );
+    }
+    mounted() {
+      this.listRequest();
+      console.log('home mouted')
+    }
+  }
 </script>
 
 <style>
