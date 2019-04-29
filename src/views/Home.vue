@@ -19,6 +19,7 @@
 
 import headPic from '../components/headPic.vue';
 import gameList from '../components/gameList.vue';
+import '../common/testing';
 
 export default {
   components: {
