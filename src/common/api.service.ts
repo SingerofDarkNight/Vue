@@ -17,6 +17,14 @@ export class ApiService {
       input: I,
       path: string,
       transform: (bytes: Uint8Array) => O): Promise<O> {
+    axios.interceptors.request.use(
+        config => {
+          console.log('interceptors dosomething');
+          return config;
+        }, err => {
+          return Promise.reject(err)
+        }
+    );
     return axios({
       url: path,
       method: 'post',
@@ -47,7 +55,7 @@ export class ApiService {
 
   //mark: Auth
   public static async checkAuth(authRequest: AuthRequest): Promise<AuthReply> {
-    return  await this.callServiceImpl(authRequest, '/api/auth', AuthReply.deserializeBinary);
+    return await this.callServiceImpl(authRequest, '/api/auth', AuthReply.deserializeBinary);
   }
 
 }
