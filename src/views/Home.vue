@@ -22,6 +22,7 @@
   import gameList from '../components/gameList.vue';
   import {ApiService} from "@/common/api.service";
   import {ListGameRequest, ListGameReply, Game} from '@/proto/bbuhot/service/game_pb'
+  import {AuthReply, AuthRequest} from "@/proto/bbuhot/service/auth_pb";
 
   @Component({
     components: {
@@ -34,6 +35,7 @@
 
     listReplay: any = new ListGameReply().toObject();
 
+    // request
     listRequest() {
       const listGameRequest = new ListGameRequest();
       listGameRequest.setGameStatus(Game.Status.PUBLISHED);
@@ -44,9 +46,21 @@
           }
       );
     }
+
+    testAuth() {
+      const authRequest = new AuthRequest();
+      authRequest.setAuth("7640HhX6wlou6L181RYTMZhcRcRGHBwmlc2n1rNdHtGw9d8X3HJKrcFItar7TEQyrxJzq0OmQ26qxw4Ii9dO");
+      authRequest.setSaltKey("BHdZ7VbY");
+      ApiService.checkAuth(authRequest).then(
+          res => {
+            console.log('test auth ', res.toObject())
+          }
+      )
+    }
+
     mounted() {
       this.listRequest();
-      console.log('home mouted')
+      // this.testAuth();
     }
   }
 </script>
