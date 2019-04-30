@@ -38,14 +38,38 @@
   </div>
 </template>
 
-<script>
-import matchCard from '../components/matchCard.vue'
+<script lang="ts">
+  import Vue from "vue";
+  import Component from "vue-class-component";
+  import matchCard from '../components/matchCard.vue';
+  import {ApiService} from "@/common/api.service";
+  import {ListGameRequest, ListGameReply, Game} from '@/proto/bbuhot/service/game_pb';
 
-export default {
-  components: {
-    matchCard
+  @Component({
+    components: {
+      matchCard
+    }
+  })
+  export default class About extends Vue {
+
+    listReplay: any = new ListGameReply().toObject();
+
+    // request
+    listRequest() {
+      const listGameRequest = new ListGameRequest();
+      listGameRequest.setGameStatus(Game.Status.PUBLISHED);
+      ApiService.listGame(listGameRequest).then(
+          ListGameReply => {
+            console.log('about ', ListGameReply.toObject());
+            this.listReplay = ListGameReply.toObject();
+          }
+      );
+    }
+
+    mounted() {
+      this.listRequest()
+    }
   }
-}
 </script>
 
 <style>

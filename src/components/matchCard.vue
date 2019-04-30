@@ -22,10 +22,14 @@
     </div>
 </template>
 
-<script>
-export default {
-    
-}
+<script lang="ts">
+  import Vue from "vue";
+  import {Component, Prop} from 'vue-property-decorator'
+
+  @Component
+	export default class MatchCard extends Vue {
+
+	}
 </script>
 
 <style>
