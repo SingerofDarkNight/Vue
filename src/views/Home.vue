@@ -15,37 +15,43 @@
 	</div>
 </template>
 
-<script>
-  import headPic from '../components/headPic.vue';
-  import gameList from '../components/gameList.vue';
-  import {ApiService} from '@/common/api.service';
-  import { ListGameRequest, Game } from '@/proto/bbuhot/service/game_pb'
-  // import {AuthReply, AuthRequest} from "@/proto/bbuhot/service/auth_pb";
+<script lang='ts'>
+import Vue from "vue";
+import Component from "vue-class-component";
+import headPic from '@/components/headPic.vue';
+import gameList from '@/components/gameList.vue';
+import {ApiService} from '@/common/api.service';
+import { ListGameReply, ListGameRequest, Game } from '@/proto/bbuhot/service/game_pb'
+// import {AuthReply, AuthRequest} from "@/proto/bbuhot/service/auth_pb";
 
-  export default {
-	  name: 'Home',
-	  components: {headPic, gameList},
-	  data() {
-		  return {
-			  listGameReply: {}
-		  }
-	  },
-	  methods: {
-		  listGameRequest() {
-			  let listGameRequest = new ListGameRequest()
-			  listGameRequest.setGameStatus(Game.Status.PUBLISHED);
-			  ApiService.listGame(listGameRequest).then(
-					  listGameReply => {
-						  console.log('wtf', listGameReply);
-						  this.listGameReply = listGameReply.toObject();
-					  }
-			  )
-		  }
-	  },
-	  mounted() {
-	  	this.listGameRequest()
-	  }
-  }
+@Component({
+	components: {
+		headPic: headPic,
+		gameList: gameList,
+	}
+})
+export default class About extends Vue {
+
+	listGameReply : ListGameReply = new ListGameReply();
+
+	// request
+	private async listRequest() : Promise<Array<Game>> {
+		const listGameRequest = new ListGameRequest();
+		listGameRequest.setGameStatus(Game.Status.PUBLISHED);
+
+		const listGameReply = await ApiService.listGame(listGameRequest);
+
+		if (listGameReply.hasAuthErrorCode()) {
+			// TODO: deal with error.
+		}
+
+		return listGameReply.getGamesList();
+	}
+
+	async mounted() {
+		console.log(await this.listRequest())
+	}
+}
 </script>
 
 <style>
