@@ -23,10 +23,8 @@
 </template>
 
 <script lang="ts">
-  import Vue from "vue";
-  import {Component, Prop} from 'vue-property-decorator'
+  import Vue from 'vue';
 
-  @Component
 	export default class MatchCard extends Vue {
 
 	}
@@ -197,5 +195,3 @@
   align-self: center !important;
 }
 </style>
-
-

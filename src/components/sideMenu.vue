@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: "sideMenu",
+    name: 'sideMenu',
     methods: {
       goTo(path) {
         if (path === 'manage') {

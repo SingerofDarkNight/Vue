@@ -18,7 +18,7 @@
   import SideMenu from '../components/sideMenu'
 
   export default {
-    name: "Manage",
+    name: 'Manage',
     components: {SideMenu},
     data () {
       return {

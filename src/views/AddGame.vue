@@ -27,7 +27,7 @@
 <script>
   import SideMenu from '../components/sideMenu'
   export default {
-    name: "AddGame",
+    name: 'AddGame',
     components: {SideMenu},
     data () {
       return {
@@ -35,7 +35,7 @@
           input1: '',
           input2: '',
           input3: ''
-        },
+        }
       }
     }
   }

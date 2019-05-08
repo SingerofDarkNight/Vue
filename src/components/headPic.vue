@@ -24,7 +24,7 @@
 
 <script>
 export default {
-    
+
 }
 </script>
 
@@ -92,4 +92,3 @@ export default {
     border-color: #000!important;
 }
 </style>
-
