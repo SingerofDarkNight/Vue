@@ -13,14 +13,17 @@
 					<div style="font-size: 20px">比赛编号: {{game.getId()}}</div>
 					<div class="game-bo-n">{{game.getName()}}</div>
 					<div class="game-deadline">下注截至日期:<br> {{new Date(game.getEndTimeMs())}}</div>
-					<Button @click="showBetModal()">查看详情</Button>
+					<Button @click="showBetModal(game)">查看详情</Button>
 					<Modal
 							v-model="isShowBetModal"
 							title="下注选项"
+							@on-ok="requestBetOption"
 					>
-						<div v-for="option in game.getBettingOptionsList()" :key="option.id">
-							<Tag :checkable="true" :checked="false" color="error" @on-change="setBetOption(option)">{{option.getName()}} 赔率: {{option.getOdds()}}</Tag>
-						</div>
+						<CheckboxGroup v-model="betsList">
+							<Checkbox v-for="option in game.getBettingOptionsList()" :key="option.id" :label="option.getName()">
+								{{option.getName()}} 赔率: {{option.getOdds()}}
+							</Checkbox>
+						</CheckboxGroup>
 					</Modal>
 				</div>
 			</div>
@@ -33,7 +36,7 @@
   import Component from "vue-class-component";
   import headPic from '../components/headPic.vue';
   import {ApiService} from '@/common/api.service';
-  import {ListGameReply, ListGameRequest, Game} from '@/proto/bbuhot/service/game_pb'
+  import {ListGameReply, ListGameRequest, Game, BetRequest} from '@/proto/bbuhot/service/game_pb'
 
   @Component({
     components: {
@@ -46,6 +49,8 @@
     listGameReply: ListGameReply = new ListGameReply();
     gamesList: Array<Game> = new Array<Game>();
     isShowBetModal: boolean = false;
+    betsList: Array<Game.Bet> = new Array<Game.Bet>();
+    pickedGame: Game = new Game();
 
     // request
     private async listRequest(): Promise<Array<Game>> {
@@ -60,17 +65,21 @@
 
       return this.listGameReply.getGamesList();
     }
+    private requestBetOption() {
+      const betRequest = new BetRequest();
+      betRequest.setGameId(this.pickedGame.getId()!);
+      betRequest.setBetsList(this.betsList);
+      console.log('request best option', this.betsList);
+    }
 
     private async loadGamesList() {
       this.gamesList = await this.listRequest();
     }
 
-    private showBetModal() {
+    private showBetModal(game: Game) {
       this.isShowBetModal = !this.isShowBetModal;
-    }
-
-    private setBetOption(option: any){
-      console.log('set bet option', option);
+      this.betsList = new Array<Game.Bet>();
+      this.pickedGame = game;
     }
 
     async mounted() {
