@@ -19,7 +19,7 @@
 							title="下注选项"
 							@on-ok="requestBetOption"
 					>
-						<CheckboxGroup v-model="betsList">
+						<CheckboxGroup v-model="betsOptionList">
 							<Checkbox v-for="option in game.getBettingOptionsList()" :key="option.id" :label="option.getName()">
 								{{option.getName()}} 赔率: {{option.getOdds()}}
 							</Checkbox>
@@ -49,7 +49,7 @@
     listGameReply: ListGameReply = new ListGameReply();
     gamesList: Array<Game> = new Array<Game>();
     isShowBetModal: boolean = false;
-    betsList: Array<Game.Bet> = new Array<Game.Bet>();
+    betsOptionList: Array<Game.BettingOption> = new Array<Game.BettingOption>();
     pickedGame: Game = new Game();
 
     // request
@@ -65,11 +65,12 @@
 
       return this.listGameReply.getGamesList();
     }
+
     private requestBetOption() {
       const betRequest = new BetRequest();
       betRequest.setGameId(this.pickedGame.getId()!);
-      betRequest.setBetsList(this.betsList);
-      console.log('request best option', this.betsList);
+      console.log(this.betsOptionList);
+      var gameBetList: Array<Game.Bet> = new Array<Game.Bet>();
     }
 
     private async loadGamesList() {
@@ -78,7 +79,7 @@
 
     private showBetModal(game: Game) {
       this.isShowBetModal = !this.isShowBetModal;
-      this.betsList = new Array<Game.Bet>();
+      this.betsOptionList = new Array<Game.BettingOption>();
       this.pickedGame = game;
     }
 
