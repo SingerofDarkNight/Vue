@@ -50,7 +50,7 @@ export class ApiService {
   }
 
   public static async bet(betRequest: BetRequest): Promise<BetReply> {
-    return await this.callServiceImpl(betRequest, '/api/bet/admin_status', BetReply.deserializeBinary);
+    return await this.callServiceImpl(betRequest, '/api/bet/bet', BetReply.deserializeBinary);
   }
 
   //mark: Auth
