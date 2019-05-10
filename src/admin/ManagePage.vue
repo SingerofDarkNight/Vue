@@ -38,45 +38,4 @@ export default Manage;
 		color: rgba(0, 0, 0, 0.85);
 	}
 
-	.manage-table {
-		margin-top: 50px;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-	}
-
-	.table-col {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		font-size: 22px;
-		font-weight: bold;
-	}
-
-	.table-data {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		background: white;
-	}
-
-	.table-item {
-		flex-grow: 1;
-		height: 50px;
-		line-height: 50px;
-		max-width: 450px;
-		border-bottom: 1px solid rgba(81, 90, 110, 0.1);
-	}
-
-	.table-action {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-around;
-	}
-
-	.table-button {
-		margin: 10px;
-		flex-grow: 1;
-	}
-
 </style>

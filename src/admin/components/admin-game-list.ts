@@ -1,29 +1,41 @@
-import Vue, {CreateElement, VNode} from "vue";
+import Vue from "vue";
 import Component from "vue-class-component";
 import {ApiService} from '@/common/api.service';
-import {ListGameReply, ListGameRequest, Game} from '@/proto/bbuhot/service/game_pb'
+import {Game, ListGameReply, ListGameRequest} from '@/proto/bbuhot/service/game_pb'
 
-@Component({
-})
+
+@Component({})
 export default class AdminGameList extends Vue {
-    gamesList: Array<Game> = new Array<Game>();
+  gamesList: Array<Game> = new Array<Game>();
+  gameStatus: Game.Status = Game.Status.PUBLISHED;
+  statusStr = {
+    0: "草稿",
+    1: "公开",
+    2: "已结算",
+    3: "已取消",
+  };
 
-    // request
-    private async listGameRequest() {
-        const listGameRequest = new ListGameRequest();
-        listGameRequest.setGameStatus(Game.Status.PUBLISHED);
-        listGameRequest.setIsAdminRequest(true);
+  private changeGameStatus(idx: number) {
+    this.gameStatus = idx;
+    this.listGameRequest(this.gameStatus);
+  }
 
-        var listGameReply: ListGameReply = await ApiService.listGame(listGameRequest);
+  // request
+  private async listGameRequest(status: Game.Status) {
+    const listGameRequest = new ListGameRequest();
+    listGameRequest.setGameStatus(status);
+    listGameRequest.setIsAdminRequest(true);
 
-        if (listGameReply.hasAuthErrorCode()) {
-        // TODO: deal with error.
-        }
+    var listGameReply: ListGameReply = await ApiService.listGame(listGameRequest);
 
-        this.gamesList = listGameReply.getGamesList();
+    if (listGameReply.hasAuthErrorCode()) {
+      // TODO: deal with error.
     }
 
-    async mounted() {
-        this.listGameRequest();
-    }
+    this.gamesList = listGameReply.getGamesList();
+  }
+
+  async mounted() {
+    this.listGameRequest(this.gameStatus);
+  }
 }

@@ -39,7 +39,7 @@
 
 <style scoped>
 	.drawer-bg {
-		height: 700px;
+		height: 100vh;
 		background-color: #565f6d;
 		width: 50px;
 

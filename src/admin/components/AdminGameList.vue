@@ -1,4 +1,14 @@
 <template>
+	<div>
+		<div class="manage-status-bg">
+				<Button class="status-button" type="info" @click="changeGameStatus(0)">草稿</Button>
+				<Button class="status-button" type="success" @click="changeGameStatus(1)">公开</Button>
+				<Button class="status-button" type="warning" @click="changeGameStatus(2)">已结算</Button>
+				<Button class="status-button" type="error" @click="changeGameStatus(3)">已取消</Button>
+		</div>
+		<div class="status-str">
+			{{this.statusStr[this.gameStatus]}}
+		</div>
     <div class="manage-table">
         <div class="table-col">
             <div class="table-item">竞猜编号</div>
@@ -17,6 +27,7 @@
             <div class="table-divider"></div>
         </div>
     </div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -26,24 +37,6 @@ export default AdminGameList;
 </script>
 
 <style scoped>
-	.manage-bg {
-		display: flex;
-		flex-direction: row;
-	}
-
-	.manage-table-bg {
-		padding: 30px;
-		width: 100%;
-		text-align: center;
-	}
-
-	.manage-table-title {
-		background-color: white;
-		text-align: center;
-		font-size: 20px;
-		font-weight: 500;
-		color: rgba(0, 0, 0, 0.85);
-	}
 
 	.manage-table {
 		margin-top: 50px;
@@ -86,4 +79,23 @@ export default AdminGameList;
 		flex-grow: 1;
 	}
 
+	.manage-status-bg {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		align-content: center;
+		margin: 20px;
+	}
+
+	.status-str {
+		background: white;
+		font-size: 26px;
+		font-weight: bold;
+	}
+
+	.status-button {
+		flex-grow: 1;
+		max-width: 200px;
+		min-width: 100px;
+	}
 </style>
