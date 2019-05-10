@@ -50,7 +50,8 @@
 				</div>
 			</Form>
 			<div class="create-button-bg">
-				<Button type="primary" @click="addBetOption">添加选项</Button>
+				<Button type="primary" @click="pushBetOption">添加选项</Button>
+				<Button type="warning" @click="popBetOption">删除选项</Button>
 				<Button type="success" @click="createGameRequest(formValidate)">创建比赛</Button>
 			</div>
 		</div>
@@ -141,11 +142,15 @@
       },
     ];
 
-    private addBetOption() {
+    private pushBetOption() {
       this.betOptionList.push({
         name: '',
         odd: 1
       });
+    }
+
+    private popBetOption() {
+      this.betOptionList.pop();
     }
 
     private createGameRequest(name: any) {
