@@ -4,15 +4,15 @@
       <Header>
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="top-bar">
-            <div class="logo-top-left"></div>
+              <router-link class="logo-top-left" to="/"></router-link>
             <div>
-              <MenuItem>
+              <MenuItem name="1">
                 <router-link to="/">主页</router-link>
               </MenuItem>
-              <MenuItem>
+              <MenuItem name="2">
                 <router-link to="/about">赛事</router-link>
               </MenuItem>
-              <MenuItem>韦恩大厦</MenuItem>
+              <MenuItem name="3">韦恩大厦</MenuItem>
             </div>
           </div>
         </Menu>

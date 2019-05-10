@@ -22,10 +22,12 @@
     </div>
 </template>
 
-<script>
-export default {
-    
-}
+<script lang="ts">
+  import Vue from 'vue';
+
+	export default class MatchCard extends Vue {
+
+	}
 </script>
 
 <style>
@@ -193,5 +195,3 @@ export default {
   align-self: center !important;
 }
 </style>
-
-
