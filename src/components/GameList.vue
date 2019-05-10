@@ -15,9 +15,9 @@
 				<span class="bet-opt-odd">
 					赔率: {{option.getOdds() / 1000000}}
 				</span>
-				<Input class="bet-money" v-model="moneyList[key]" placeholder="输入金额" />
+				<Input class="bet-money" v-model="moneyList[key]" placeholder="输入金额"/>
 			</div>
-        	<Button class="game-button" @click="updateBets()">下注</Button>
+			<Button class="game-button" @click="updateBets()">下注</Button>
 		</Drawer>
     </div>
 </template>

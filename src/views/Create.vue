@@ -234,7 +234,7 @@
 		justify-content: flex-start;
 		align-items: center;
 		width: 30%;
-		min-width: 350px;
+		min-width: 400px;
 		font-weight: bold;
 	}
 
