@@ -18,7 +18,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import headPic from '@/components/headPic.vue';
-import GameList from '@/components/GameList.vue';
+import GameList from './components/GameList.vue';
 import {ApiService} from '@/common/api.service';
 import {ListGameReply, ListGameRequest, Game, BetRequest, BetReply} from '@/proto/bbuhot/service/game_pb';
 
@@ -28,7 +28,7 @@ import {ListGameReply, ListGameRequest, Game, BetRequest, BetReply} from '@/prot
 		headPic: headPic,
 	}
 })
-export default class Home extends Vue {
+export default class BetHomePage extends Vue {
 	gamesList: Array<Game> = new Array<Game>();
 
 	// request

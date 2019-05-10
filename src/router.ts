@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import BetHomePage from './betting/BetHomePage.vue'
 import About from './views/About.vue'
-import Manage from './views/Manage.vue'
-import Create from './views/Create.vue'
+import ManagePage from './admin/ManagePage.vue'
+import CreatePage from './admin/CreatePage.vue'
 
 Vue.use(Router)
 
@@ -13,7 +13,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: BetHomePage
     },
     {
       path: '/about',
@@ -27,12 +27,12 @@ export default new Router({
     {
       path: '/admin/manage',
       name: 'manage',
-      component: Manage
+      component: ManagePage,
     },
     {
       path: '/admin/create',
       name: 'create',
-      component: Create
+      component: CreatePage,
     },
   ]
 })

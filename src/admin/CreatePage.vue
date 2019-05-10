@@ -61,7 +61,7 @@
 <script lang="ts">
   import Vue from "vue";
   import Component from "vue-class-component";
-  import SideDrawer from "../components/drawer.vue"
+  import SideDrawer from "@/admin/components/drawer.vue"
   import {ApiService} from '@/common/api.service';
   import {AdminGameRequest, AdminGameReply, Game} from '@/proto/bbuhot/service/game_pb'
   import BettingOption = Game.BettingOption;
@@ -71,7 +71,7 @@
       drawer: SideDrawer,
     }
   })
-  export default class Create extends Vue {
+  export default class CreatePage extends Vue {
 
     formValidate = {
       name: '',
