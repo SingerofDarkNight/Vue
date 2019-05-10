@@ -89,6 +89,7 @@
 		align-items: center;
 		width: 30%;
 		font-weight: bold;
+		min-width: 400px;
 	}
 
 	.form-input {
