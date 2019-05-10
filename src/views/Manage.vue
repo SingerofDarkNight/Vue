@@ -8,42 +8,33 @@
 				管理比赛
 			</div>
 			<div class="manage-table">
-				<Table :columns="tableCols" :data="tableData"></Table>
+				<div class="table-col">
+					<div class="table-item">竞猜编号</div>
+					<div class="table-item">竞猜名称</div>
+					<div class="table-item">截止时间</div>
+					<div class="table-item">操作</div>
+				</div>
+				<div v-for="game in gamesList" class="table-data" :key="game.id">
+					<div class="table-item">{{game.getId()}}</div>
+					<div class="table-item">{{game.getName()}}</div>
+					<div class="table-item">{{new Date(game.getEndTimeMs()).toUTCString()}}</div>
+					<div class="table-item table-action">
+						<Button class="table-button" type="primary">详情</Button>
+						<Button class="table-button" type="error">删除</Button>
+					</div>
+					<div class="table-divider"></div>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script lang="ts">
-  import Vue from "vue";
+<script lang="tsx">
+  import Vue, {CreateElement, VNode} from "vue";
   import Component from "vue-class-component";
   import SideDrawer from "../components/drawer.vue"
   import {ApiService} from '@/common/api.service';
   import {ListGameReply, ListGameRequest, Game} from '@/proto/bbuhot/service/game_pb'
-
-    class TableCols {
-    public title: string;
-    public key: string;
-    public render: any;
-
-    constructor(title: string, key: string, render?: any) {
-      this.title = title;
-      this.key = key;
-      this.render = render;
-    }
-  }
-
-  class TableData {
-    public id:number;
-    public name: string;
-    public endTime: string;
-
-    constructor(id: number, name: string, endTimeTs: number) {
-      this.id = id;
-      this.name = name;
-      this.endTime = new Date(endTimeTs).toUTCString();
-    }
-  }
 
   @Component({
     components: {
@@ -54,10 +45,6 @@
   export default class Manage extends Vue {
 
     gamesList: Array<Game> = new Array<Game>();
-
-    tableCols: Array<TableCols> = new Array<TableCols>();
-
-    tableData: Array<TableData> = new Array<TableData>();
 
     // request
     private async listGameRequest() {
@@ -72,31 +59,9 @@
       }
 
       this.gamesList = listGameReply.getGamesList();
-
-      this.gamesList.forEach(game => {
-        console.log('manage list', game);
-        var data: TableData = new TableData(
-            game.getId()!,
-            game.getName()!,
-            game.getEndTimeMs()!
-        );
-        this.tableData.push(data);
-      });
     }
-
-    private initTable() {
-      var col1: TableCols = new TableCols('竞猜编号', 'id');
-      var col2: TableCols = new TableCols('竞猜名称', 'name');
-      var col3: TableCols = new TableCols('截止时间', 'endTime');
-      // var col4: TableCols = new TableCols('操作', 'action');
-      this.tableCols.push(col1);
-      this.tableCols.push(col2);
-      this.tableCols.push(col3);
-    }
-
 
     async mounted() {
-      this.initTable();
       this.listGameRequest();
     }
   }
@@ -105,23 +70,62 @@
 <style scoped>
 	.manage-bg {
 		display: flex;
-		flex-direction:row;
+		flex-direction: row;
 	}
 
 	.manage-table-bg {
 		padding: 30px;
+		width: 100%;
+		text-align: center;
 	}
 
 	.manage-table-title {
-		background-color:white;
+		background-color: white;
 		text-align: center;
-		font-size:20px;
-		font-weight:500;
-		color:rgba(0,0,0,0.85);
+		font-size: 20px;
+		font-weight: 500;
+		color: rgba(0, 0, 0, 0.85);
 	}
 
 	.manage-table {
 		margin-top: 50px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+
+	.table-col {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		font-size: 22px;
+		font-weight: bold;
+	}
+
+	.table-data {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		background: white;
+	}
+
+	.table-item {
+		flex-grow: 1;
+		height: 50px;
+		line-height: 50px;
+		max-width: 450px;
+		border-bottom: 1px solid rgba(81, 90, 110, 0.1);
+	}
+
+	.table-action {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+	}
+
+	.table-button {
+		margin: 10px;
+		flex-grow: 1;
 	}
 
 </style>
