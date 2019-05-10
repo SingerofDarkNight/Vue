@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {ApiService} from '@/common/api.service';
-import {Game, ListGameReply, ListGameRequest} from '@/proto/bbuhot/service/game_pb'
+import {AdminGameStatusRequest, AdminGameStatusReply, Game, ListGameReply, ListGameRequest} from '@/proto/bbuhot/service/game_pb'
 
 
 @Component({})
@@ -15,7 +15,7 @@ export default class AdminGameList extends Vue {
     3: "已取消",
   };
 
-  private changeGameStatus(idx: number) {
+  private changeGameListRequest(idx: number) {
     this.gameStatus = idx;
     this.listGameRequest(this.gameStatus);
   }
@@ -26,7 +26,7 @@ export default class AdminGameList extends Vue {
     listGameRequest.setGameStatus(status);
     listGameRequest.setIsAdminRequest(true);
 
-    var listGameReply: ListGameReply = await ApiService.listGame(listGameRequest);
+    let listGameReply: ListGameReply = await ApiService.listGame(listGameRequest);
 
     if (listGameReply.hasAuthErrorCode()) {
       // TODO: deal with error.
@@ -37,5 +37,28 @@ export default class AdminGameList extends Vue {
 
   async mounted() {
     this.listGameRequest(this.gameStatus);
+  }
+
+  private async changeGameStatus(game: Game, type: number) {
+    const adminGameStatusRequest: AdminGameStatusRequest = new AdminGameStatusRequest();
+    adminGameStatusRequest.setGameId(game.getId()!);
+    let status: Game.Status = Game.Status.DRAFT;
+    if (type == 0) {
+      status = Game.Status.PUBLISHED;
+    } else if (type == 1) {
+      status = Game.Status.SETTLED;
+    } else if (type == 3) {
+      status = Game.Status.CANCELLED;
+    }
+
+    let idx = this.gamesList.indexOf(game);
+    this.gamesList.splice(idx, 1);
+
+    adminGameStatusRequest.setGameStatus(status);
+
+    let adminGameStatusReply: AdminGameStatusReply  = await ApiService.adminGameStatus(adminGameStatusRequest);
+    if (adminGameStatusReply.hasAuthErrorCode()) {
+      // TODO: deal with error.
+    }
   }
 }
