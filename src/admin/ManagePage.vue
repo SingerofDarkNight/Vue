@@ -13,9 +13,9 @@
 </template>
 
 <script lang="tsx">
-import AdminGameList from "./manage-page"
+import Manage from "./manage-page"
 
-export default AdminGameList;
+export default Manage;
 </script>
 
 <style scoped>
