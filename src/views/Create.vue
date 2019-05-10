@@ -7,45 +7,45 @@
 			<div class="create-form-title">
 				创建比赛
 			</div>
-			<Form ref="formValidate" class="form-group-bg" :rules="ruleValidate">
-				<FormItem class="form-item" label="名称" prop="name">
-					<Input class="form-input" placeholder="输入名称"/>
+			<Form ref="formValidate" :model="formValidate" class="form-group-bg" :rules="ruleValidate">
+				<FormItem class="form-item" label="名称" :prop="formValidate.name">
+					<Input class="form-input" placeholder="输入名称" v-model="formValidate.name"/>
 				</FormItem>
 				<FormItem class="form-item" label="描述" prop="desc">
-					<Input class="form-input" placeholder="输入描述"/>
+					<Input class="form-input" placeholder="输入描述" v-model="formValidate.desc"/>
 				</FormItem>
-				<FormItem class="form-item" label="普通用户可见" prop="visible">
-					<Select style="width:300px">
-						<Option v-for="item in formValidate.visibleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-					</Select>
-				</FormItem>
-				<FormItem class="form-item" label="状态" prop="status">
-					<Select style="width:300px">
-						<Option v-for="item in formValidate.statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-					</Select>
-				</FormItem>
+				<!--<FormItem class="form-item" label="普通用户可见" prop="visible">-->
+					<!--<Select style="width:300px" v-model="formValidate.visible">-->
+						<!--<Option v-for="item in formValidate.visibleList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+					<!--</Select>-->
+				<!--</FormItem>-->
+				<!--<FormItem class="form-item" label="状态" prop="status">-->
+					<!--<Select style="width:300px" v-model="formValidate.status">-->
+						<!--<Option v-for="item in formValidate.statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+					<!--</Select>-->
+				<!--</FormItem>-->
 				<FormItem class="form-item" label="最大注数" prop="limit">
-					<Input class="form-input" placeholder="输入最大下注数"/>
+					<Input class="form-input" placeholder="输入最大下注数" v-model="formValidate.limit"/>
 				</FormItem>
 				<FormItem class="form-item" label="最低金额" prop="lowest">
-					<Input class="form-input" placeholder="输入最低下注金额"/>
+					<Input class="form-input" placeholder="输入最低下注金额" v-model="formValidate.lowest"/>
 				</FormItem>
 				<FormItem class="form-item" label="最高金额" prop="highest">
-					<Input class="form-input" placeholder="输入最高下注金额"/>
+					<Input class="form-input" placeholder="输入最高下注金额" v-model="formValidate.highest"/>
 				</FormItem>
 				<FormItem class="form-item" label="下注截至日期" prop="enddate">
-					<DatePicker type="date" placeholder="下注截日期" style="width: 300px"></DatePicker>
+					<DatePicker type="date" placeholder="下注截日期" style="width: 300px" v-model="formValidate.enddate"></DatePicker>
 				</FormItem>
-				<FormItem class="form-item" label="下注截至时间" prop="endtime">
-					<TimePicker type="time" placeholder="下注截时间" style="width: 300px"></TimePicker>
-				</FormItem>
-				<div class="form-option-bg" v-for="(option, key) in betOptionList" :key="option.id">
+				<!--<FormItem class="form-item" label="下注截至时间" prop="endtime">-->
+				<!--<TimePicker type="time" placeholder="下注截时间" style="width: 300px" v-model="formValidate.endtime"></TimePicker>-->
+				<!--</FormItem>-->
+				<div class="form-option-bg" v-for="(option, key) in formValidate.betOptionList" :key="option.id">
 					<div class="form-item form-option-item">下注选项: {{key}}</div>
-						<FormItem class="form-item form-option-item" label="下注名称" prop="betOptionList[key].name">
-							<Input class="form-input" placeholder="输入下注选项名称"/>
+						<FormItem class="form-item form-option-item" label="下注名称" :prop="option.name">
+							<Input class="form-input" placeholder="输入下注选项名称" v-model="formValidate.betOptionList[key].name"/>
 						</FormItem>
-						<FormItem class="form-item form-option-item" label="下注赔率" prop="betOptionList[key].odd">
-							<Input class="form-input" placeholder="输入金额"/>
+						<FormItem class="form-item form-option-item" label="下注赔率" :prop="option.odd">
+							<Input class="form-input" placeholder="输入金额" v-model="formValidate.betOptionList[key].odd"/>
 						</FormItem>
 				</div>
 			</Form>
@@ -62,7 +62,9 @@
   import Vue from "vue";
   import Component from "vue-class-component";
   import SideDrawer from "../components/drawer.vue"
-
+  import {ApiService} from '@/common/api.service';
+  import {AdminGameRequest, AdminGameReply, Game} from '@/proto/bbuhot/service/game_pb'
+  import BettingOption = Game.BettingOption;
 
   @Component({
     components: {
@@ -71,15 +73,15 @@
   })
   export default class Create extends Vue {
 
-    private formValidate: Object = new Object({
-      name: String,
-      desc: String,
-      limit: Number,
-      lowest: Number,
-      highest: Number,
-      enddate: Number,
-      endtime: Number,
-      money: Number,
+    formValidate = {
+      name: '',
+      desc: '',
+      limit: '',
+      lowest: '',
+      highest:'',
+      enddate:'',
+      endtime:'',
+      money:'',
       visibleList: [
         {
           value: 0,
@@ -90,6 +92,7 @@
           label: "是"
         }
       ],
+      visible: '',
       statusList: [
         {
           value: 0,
@@ -109,7 +112,18 @@
 				 缺少   This will kick of worker to pay the rewards. optional Status status = 5
 				 */
       ],
-    });
+      status: 0,
+      betOptionList: [
+        {
+          name: '',
+          odd: ''
+        },
+        {
+          name: '',
+          odd: ''
+        },
+      ]
+    };
 
     private ruleValidate: Object = new Object({
       name: [
@@ -135,26 +149,50 @@
       ],
     });
 
-    private betOptionList = [
-      {
-        name: '',
-        odd: 1
-      },
-    ];
 
     private pushBetOption() {
-      this.betOptionList.push({
+      this.formValidate.betOptionList.push({
         name: '',
-        odd: 1
+        odd: ''
       });
     }
 
     private popBetOption() {
-      this.betOptionList.pop();
+      this.formValidate.betOptionList.pop();
     }
 
-    private createGameRequest(name: any) {
-      console.log(name);
+    private async createGameRequest() {
+      const adminGameRequest: AdminGameRequest = new AdminGameRequest();
+
+      const game: Game = new Game();
+      game.setId(-1);
+      game.setName(this.formValidate.name.toString());
+      game.setDescription(this.formValidate.desc.toString());
+      game.setBetOptionLimit(Number(this.formValidate.limit));
+      game.setBetAmountLowest(Number(this.formValidate.lowest));
+      game.setBetAmountHighest(Number(this.formValidate.highest));
+       // game.setNormalUserVisible(Boolean(this.formValidate.visible));
+      // game.setStatus(this.formValidate.status);
+
+      const endTs = new Date(this.formValidate.enddate).getTime();
+      game.setEndTimeMs(endTs);
+
+      const betOptionList : Array<Game.BettingOption> = new Array<Game.BettingOption>();
+      await this.formValidate.betOptionList.forEach(
+          option => {
+						const betOption: Game.BettingOption = new Game.BettingOption();
+						betOption.setName(option.name);
+						betOption.setOdds(Number(option.odd));
+						betOptionList.push(betOption);
+          }
+      );
+      game.setBettingOptionsList(betOptionList);
+
+      adminGameRequest.setGame(game);
+      const adminGameReply: AdminGameReply = await ApiService.adminGame(adminGameRequest);
+      if (adminGameReply.hasAuthErrorCode()) {
+        // TODO: deal with error.
+      }
     }
 
     mounted() {
