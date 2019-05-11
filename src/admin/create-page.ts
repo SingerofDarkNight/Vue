@@ -38,7 +38,7 @@ export default class CreatePage extends Vue {
       },
       {
         value: 1,
-        label: "公开"
+        label: "发布"
       }, {
         value: 2,
         label: "封盘"

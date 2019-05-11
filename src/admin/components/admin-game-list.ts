@@ -1,13 +1,15 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {ApiService} from '@/common/api.service';
-import {EditModel} from "./edit-model"
+import {EditGameModel} from "./edit-game-model"
 import {
-  AdminGameStatusRequest,
+  AdminGameReply,
+  AdminGameRequest,
   AdminGameStatusReply,
+  AdminGameStatusRequest,
   Game,
   ListGameReply,
-  ListGameRequest, AdminGameRequest, AdminGameReply
+  ListGameRequest
 } from '@/proto/bbuhot/service/game_pb'
 
 
@@ -23,25 +25,28 @@ export default class AdminGameList extends Vue {
   gameStatus: Game.Status = Game.Status.PUBLISHED;
   // Is show edit drawer
   showEditDrawer: boolean = false;
+  showSettleDrawer: boolean = false;
+  settleGame: Game = new Game();
+  settleIdList: Array<number> = new Array<number>();
   //  Current table data game status title map
   statusStr = {
     0: "草稿",
-    1: "公开",
+    1: "发布",
     2: "结算",
     3: "流局",
   };
 
-  editModel: EditModel = new EditModel();
-
-
-  private changeGameListRequest(idx: number) {
-    this.gameStatus = idx;
-    this.listGameRequest(this.gameStatus);
-  }
+  editModel: EditGameModel = new EditGameModel();
 
   private editGame(game: Game) {
     this.showEditDrawer = !this.showEditDrawer;
-    this.editModel = new EditModel(game);
+    this.editModel = new EditGameModel(game);
+  }
+  private settledDrawer(game: Game) {
+    this.settleGame = game;
+    this.settleIdList = [];
+    this.showSettleDrawer = !this.showSettleDrawer;
+    console.log('settle ', game.getBettingOptionsList().length);
   }
 
   private pushBetOption() {
@@ -56,6 +61,11 @@ export default class AdminGameList extends Vue {
   }
 
   // request
+  private changeGameListRequest(idx: number) {
+    this.gameStatus = idx;
+    this.listGameRequest(this.gameStatus);
+  }
+
   private async listGameRequest(status: Game.Status) {
     const listGameRequest = new ListGameRequest();
     listGameRequest.setGameStatus(status);
@@ -75,12 +85,14 @@ export default class AdminGameList extends Vue {
     adminGameStatusRequest.setGameId(game.getId()!);
     let status: Game.Status = Game.Status.DRAFT;
     /*
-      0: 公开
-      1: 编辑
+      0: 草稿
+      1: 发布
       2: 结算
       3: 流局
      */
     if (type == 0) {
+      status = Game.Status.DRAFT;
+    } else if (type == 1) {
       status = Game.Status.PUBLISHED;
     } else if (type == 2) {
       status = Game.Status.SETTLED;
@@ -99,7 +111,7 @@ export default class AdminGameList extends Vue {
     }
   }
 
-  private async updateGameRequest(editGame: EditModel) {
+  private async updateGameRequest(editGame: EditGameModel) {
     const adminGameRequest: AdminGameRequest = new AdminGameRequest();
 
     const game: Game = new Game();
@@ -129,6 +141,26 @@ export default class AdminGameList extends Vue {
     }
     this.showEditDrawer = !this.showEditDrawer;
     this.listGameRequest(this.gameStatus);
+  }
+
+  private async settleGameRequest() {
+    console.log('settle ', this.settleIdList);
+    const adminGameStatusRequest: AdminGameStatusRequest = new AdminGameStatusRequest();
+    adminGameStatusRequest.setGameId(this.settleGame.getId()!);
+
+    let idx = this.gamesList.indexOf(this.settleGame);
+    this.gamesList.splice(idx, 1);
+    adminGameStatusRequest.setGameStatus(Game.Status.SETTLED);
+    await this.settleIdList.forEach(
+        id => {
+          adminGameStatusRequest.setWinningOption(id);
+        }
+    );
+    let adminGameStatusReply: AdminGameStatusReply = await ApiService.adminGameStatus(adminGameStatusRequest);
+    if (adminGameStatusReply.hasAuthErrorCode()) {
+      // TODO: deal with error.
+    }
+    this.showSettleDrawer = !this.showSettleDrawer;
   }
 
   async mounted() {

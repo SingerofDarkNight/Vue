@@ -1,6 +1,6 @@
 import {Game} from "@/proto/bbuhot/service/game_pb";
 
-export class EditModel {
+export class EditGameModel {
   public id: number;
   public name: string;
   public desc: string;
@@ -31,7 +31,7 @@ export class EditModel {
         break;
       }
       case 1: {
-        statusStr = "公开";
+        statusStr = "发布";
         break;
       }
       case 2: {

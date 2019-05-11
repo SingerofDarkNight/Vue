@@ -2,7 +2,7 @@
 	<div>
 		<div class="manage-status-bg">
 				<Button class="status-button" type="info" @click="changeGameListRequest(0)">草稿</Button>
-				<Button class="status-button" type="success" @click="changeGameListRequest(1)">公开</Button>
+				<Button class="status-button" type="success" @click="changeGameListRequest(1)">发布</Button>
 				<Button class="status-button" type="warning" @click="changeGameListRequest(2)">结算</Button>
 				<Button class="status-button" type="error" @click="changeGameListRequest(3)">流局</Button>
 		</div>
@@ -14,18 +14,43 @@
 				<div class="table-item">竞猜编号</div>
 				<div class="table-item">竞猜名称</div>
 				<div class="table-item">截止时间</div>
+				<div class="table-item">用户可见</div>
 				<div class="table-item">操作</div>
 			</div>
 			<div v-for="game in gamesList" class="table-data" :key="game.id">
 				<div class="table-item">{{game.getId()}} {{game.getStatus()}}</div>
 				<div class="table-item">{{game.getName()}}</div>
 				<div class="table-item">{{new Date(game.getEndTimeMs()).toLocaleDateString()}}</div>
+				<div class="table-item">{{game.getNormalUserVisible()}}</div>
 				<div class="table-item table-action">
-					<Button v-if="gameStatus === 0" class="table-button" type="primary" @click="changeGameStatusRequest(game, 0)">公开</Button>
+					<Button v-if="gameStatus === 0" class="table-button" type="primary" @click="changeGameStatusRequest(game, 1)">发布</Button>
 					<Button v-else-if="gameStatus === 1" class="table-button" type="primary" @click="editGame(game)">编辑</Button>
-					<Button v-if="gameStatus === 1" class="table-button" type="success" @click="changeGameStatusRequest(game, 2)">结算</Button>
-					<Button v-if="gameStatus === 1 || gameStatus === 2" class="table-button" type="error"  @click="changeGameStatusRequest(game, 3)">流局</Button>
+					<Button v-if="gameStatus === 1" class="table-button" type="success" @click="settledDrawer(game)">结算</Button>
+					<Button v-if="gameStatus === 3" class="table-button" type="primary" @click="changeGameStatusRequest(game, 1)">发布</Button>
+					<Button v-if="gameStatus === 1" class="table-button" type="error"  @click="changeGameStatusRequest(game, 3)">流局</Button>
 				</div>
+				<Drawer
+						title="结算比赛"
+						v-model="showSettleDrawer"
+						width="720"
+						:mask-closable="false"
+				>
+					<CheckboxGroup v-model="settleIdList">
+						<div class="settle-item-bg" v-for="(opt,key) in settleGame.getBettingOptionsList()" :key="opt.id">
+							<div class="edit-item-checkbox-bg">
+								<Checkbox :label="key" class="settle-item-checkbox" size="large">
+								</Checkbox>
+							</div>
+							<div class="settle-item-title">
+								{{opt.getName()}} : {{opt.getOdds()}}
+							</div>
+						</div>
+					</CheckboxGroup>
+					<div class="edit-button-bg">
+						<Button class="edit-button" @click="settleGameRequest"  type="success">结算</Button>
+						<Button class="edit-button" @click="showSettleDrawer = !showSettleDrawer" type="error">取消</Button>
+					</div>
+				</Drawer>
 				<!--Edit game drawer start-->
 				<Drawer
 						title="编辑比赛"
@@ -73,7 +98,7 @@
 							<div class="edit-item-bg">
 								<div class="edit-item-title">{{key}}</div>
 								<Input v-model="editModel.bettingOptionList[key].name" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
-								<Input v-model="editModel.bettingOptionList[key].odd" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+								<Input v-model="editModel.bettingOptionList[key].odd" size="large"  class="edit-item-input" placeholder="赔率" style="width: 300px" />
 							</div>
 						</div>
 					</div>
@@ -87,6 +112,7 @@
 					</div>
 				</Drawer>
 				<!--Edit game drawer end-->
+
 				<div class="table-divider"></div>
 			</div>
 		</div>
@@ -111,7 +137,7 @@
 	.table-col {
 		display: flex;
 		flex-direction: row;
-		justify-content: flex-start;
+		justify-content: space-between;
 		font-size: 22px;
 		font-weight: bold;
 	}
@@ -127,7 +153,7 @@
 		flex-grow: 1;
 		height: 50px;
 		line-height: 50px;
-		max-width: 450px;
+		max-width: 20%;
 		border-bottom: 1px solid rgba(81, 90, 110, 0.1);
 	}
 
@@ -218,6 +244,19 @@
 	.edit-button {
 		flex-grow: 1;
 		margin: 10px;
+	}
+
+	.settle-item-bg {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-content: center;
+		height: 50px;
+	}
+
+	.settle-item-title {
+		font-size: 22px;
+		font-weight: bold;
 	}
 
 </style>
