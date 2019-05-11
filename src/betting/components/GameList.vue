@@ -3,7 +3,7 @@
         <div class="game-id" style="font-size: 20px">比赛编号: {{game.getId()}}</div>
         <div class="game-name">{{game.getName()}}</div>
         <div class="game-deadline">
-			下注截至日期:<br> {{new Date(game.getEndTimeMs()).toUTCString()}}
+			下注截至日期:<br> {{new Date(game.getEndTimeMs()).toLocaleDateString()}}
 		</div>
         <Button class="game-button" @click="showDrawer = true">查看详情</Button>
 		<Drawer v-model="showDrawer">

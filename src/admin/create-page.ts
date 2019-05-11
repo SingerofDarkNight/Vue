@@ -115,7 +115,7 @@ export default class CreatePage extends Vue {
         option => {
           const betOption: Game.BettingOption = new Game.BettingOption();
           betOption.setName(option.name);
-          betOption.setOdds(Number(option.odd));
+          betOption.setOdds(Number(option.odd)* Math.pow(10, 6));
           betOptionList.push(betOption);
         }
     );

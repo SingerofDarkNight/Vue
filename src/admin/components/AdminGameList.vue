@@ -3,8 +3,8 @@
 		<div class="manage-status-bg">
 				<Button class="status-button" type="info" @click="changeGameListRequest(0)">草稿</Button>
 				<Button class="status-button" type="success" @click="changeGameListRequest(1)">公开</Button>
-				<Button class="status-button" type="warning" @click="changeGameListRequest(2)">已结算</Button>
-				<Button class="status-button" type="error" @click="changeGameListRequest(3)">已取消</Button>
+				<Button class="status-button" type="warning" @click="changeGameListRequest(2)">结算</Button>
+				<Button class="status-button" type="error" @click="changeGameListRequest(3)">流局</Button>
 		</div>
 		<div class="status-str">
 			{{this.statusStr[this.gameStatus]}}
@@ -17,14 +17,76 @@
 				<div class="table-item">操作</div>
 			</div>
 			<div v-for="game in gamesList" class="table-data" :key="game.id">
-				<div class="table-item">{{game.getId()}}</div>
+				<div class="table-item">{{game.getId()}} {{game.getStatus()}}</div>
 				<div class="table-item">{{game.getName()}}</div>
-				<div class="table-item">{{new Date(game.getEndTimeMs()).toUTCString()}}</div>
+				<div class="table-item">{{new Date(game.getEndTimeMs()).toLocaleDateString()}}</div>
 				<div class="table-item table-action">
-					<Button v-if="gameStatus === 0" class="table-button" type="primary" @click="changeGameStatus(game, 0)">公开</Button>
-					<Button v-else-if="gameStatus === 1" class="table-button" type="success" @click="changeGameStatus(game, 1)">结算</Button>
-					<Button v-if="gameStatus !== 3 || gameStatus !== 3" class="table-button" type="error"  @click="changeGameStatus(game, 3)">取消</Button>
+					<Button v-if="gameStatus === 0" class="table-button" type="primary" @click="changeGameStatusRequest(game, 0)">公开</Button>
+					<Button v-else-if="gameStatus === 1" class="table-button" type="primary" @click="editGame(game)">编辑</Button>
+					<Button v-if="gameStatus === 1" class="table-button" type="success" @click="changeGameStatusRequest(game, 2)">结算</Button>
+					<Button v-if="gameStatus === 1 || gameStatus === 2" class="table-button" type="error"  @click="changeGameStatusRequest(game, 3)">流局</Button>
 				</div>
+				<!--Edit game drawer start-->
+				<Drawer
+						title="编辑比赛"
+						v-model="showEditDrawer"
+						width="720"
+						:mask-closable="false"
+				>
+					<div class="edit-drawer-bg">
+						<div class="edit-item-bg">
+							<div class="edit-item-title">名称</div>
+							<Input v-model="editModel.name" size="large" class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">描述</div>
+							<Input v-model="editModel.desc" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">普通用户是否可见</div>
+							<div class="edit-item-checkbox-bg">
+								<Checkbox class="edit-item-checkbox" v-model="editModel.visible" size="large">
+								</Checkbox>
+							</div>
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">比赛状态:</div>
+							<div class="edit-item-str">{{editModel.statusStr}}</div>
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">最多下注数</div>
+							<Input v-model="editModel.limit" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">最低金额</div>
+							<Input v-model="editModel.lowest" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">最高金额</div>
+							<Input v-model="editModel.highest" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">下注截至日期</div>
+							<DatePicker  v-model="editModel.endTimeStr" class="edit-item-picker" type="date" placeholder="Select date"></DatePicker>
+						</div>
+						<div v-for="(option, key) in editModel.bettingOptionList" :key="option.id">
+							<div class="edit-item-bg">
+								<div class="edit-item-title">{{key}}</div>
+								<Input v-model="editModel.bettingOptionList[key].name" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+								<Input v-model="editModel.bettingOptionList[key].odd" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
+							</div>
+						</div>
+					</div>
+					<div class="edit-button-bg">
+						<Button class="edit-button" @click="pushBetOption()" type="primary">添加</Button>
+						<Button class="edit-button" @click="popBetOption()" type="warning">删除</Button>
+					</div>
+					<div class="edit-button-bg">
+						<Button class="edit-button" @click="updateGameRequest(editModel)" type="success">更新</Button>
+						<Button class="edit-button" @click="showEditDrawer = !showEditDrawer" type="error">取消</Button>
+					</div>
+				</Drawer>
+				<!--Edit game drawer end-->
 				<div class="table-divider"></div>
 			</div>
 		</div>
@@ -34,7 +96,7 @@
 <script lang="ts">
   import AdminGameList from "./admin-game-list"
 
-export default AdminGameList;
+  export default AdminGameList;
 </script>
 
 <style scoped>
@@ -99,4 +161,63 @@ export default AdminGameList;
 		max-width: 200px;
 		min-width: 100px;
 	}
+
+	.edit-drawer-bg {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-content: flex-start;
+		padding: 20px;
+	}
+
+	.edit-item-bg {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-content: center;
+		height: 50px;
+	}
+
+	.edit-item-title {
+		text-align: center;
+		line-height: 36px;
+	}
+
+	.edit-item-input {
+		margin-left: 10px;
+		width: 300px;
+	}
+
+	.edit-item-checkbox-bg {
+		margin-left: 10px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		height: 36px;
+	}
+
+	.edit-item-str {
+		margin-left: 10px;
+		line-height: 36px;
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	.edit-item-picker {
+		width: 300px;
+		margin-left: 10px;
+	}
+
+	.edit-button-bg {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		align-content: center;
+	}
+
+	.edit-button {
+		flex-grow: 1;
+		margin: 10px;
+	}
+
 </style>
