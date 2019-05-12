@@ -42,7 +42,7 @@
 								</Checkbox>
 							</div>
 							<div class="settle-item-title">
-								{{opt.getName()}} : {{opt.getOdds()}}
+								{{opt.getName()}} 赔率: {{opt.getOdds() / Math.pow(10, 6)}}
 							</div>
 						</div>
 					</CheckboxGroup>
