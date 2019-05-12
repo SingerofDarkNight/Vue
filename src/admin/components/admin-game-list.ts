@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import {ApiService} from '@/common/api.service';
+import './filter';
 import {EditGameModel} from "./edit-game-model"
 import {
   AdminGameReply,
@@ -36,6 +37,8 @@ export default class AdminGameList extends Vue {
     3: "流局",
   };
 
+  ghost = [true, false, true, true];
+
   editModel: EditGameModel = new EditGameModel();
 
   private editGame(game: Game) {
@@ -63,6 +66,8 @@ export default class AdminGameList extends Vue {
   // request
   private changeGameListRequest(idx: number) {
     this.gameStatus = idx;
+    this.ghost = [true, true, true, true];
+    this.ghost[idx] = false;
     this.listGameRequest(this.gameStatus);
   }
 

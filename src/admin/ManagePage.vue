@@ -22,6 +22,7 @@ export default Manage;
 	.manage-bg {
 		display: flex;
 		flex-direction: row;
+		height: 100%;
 	}
 
 	.manage-table-bg {
@@ -31,8 +32,8 @@ export default Manage;
 	}
 
 	.manage-table-title {
-		background-color: white;
-		text-align: center;
+		display: flex;
+		padding: 5px;
 		font-size: 20px;
 		font-weight: 500;
 		color: rgba(0, 0, 0, 0.85);

@@ -39,7 +39,7 @@
 
 <style scoped>
 	.drawer-bg {
-		height: 100vh;
+		height: 100%;
 		background-color: #565f6d;
 		width: 50px;
 
@@ -57,8 +57,11 @@
 
 	.drawer-item {
 		font-size: 18px;
+		padding: 5px;
+		border-radius: 5px;
 		text-align: center;
 		cursor: pointer;
+		transition: 0.2s
 	}
 	.drawer-item:hover {
 		background: #2f8cf0;

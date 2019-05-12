@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="manage-status-bg">
-				<Button class="status-button" type="info" @click="changeGameListRequest(0)">草稿</Button>
-				<Button class="status-button" type="success" @click="changeGameListRequest(1)">发布</Button>
-				<Button class="status-button" type="warning" @click="changeGameListRequest(2)">结算</Button>
-				<Button class="status-button" type="error" @click="changeGameListRequest(3)">流局</Button>
+				<Button class="status-button" type="info" :ghost="ghost[0]" @click="changeGameListRequest(0)">草稿</Button>
+				<Button class="status-button" type="success" :ghost="ghost[1]" @click="changeGameListRequest(1)">发布</Button>
+				<Button class="status-button" type="warning" :ghost="ghost[2]" @click="changeGameListRequest(2)">结算</Button>
+				<Button class="status-button" type="error" :ghost="ghost[3]" @click="changeGameListRequest(3)">流局</Button>
 		</div>
-		<div class="status-str">
+		<!-- <div class="status-str">
 			{{this.statusStr[this.gameStatus]}}
-		</div>
+		</div> -->
 		<div class="manage-table">
 			<div class="table-col">
 				<div class="table-item">竞猜编号</div>
@@ -21,13 +21,13 @@
 				<div class="table-item">{{game.getId()}} {{game.getStatus()}}</div>
 				<div class="table-item">{{game.getName()}}</div>
 				<div class="table-item">{{new Date(game.getEndTimeMs()).toLocaleDateString()}}</div>
-				<div class="table-item">{{game.getNormalUserVisible()}}</div>
+				<div class="table-item">{{game.getNormalUserVisible() | tof}}</div>
 				<div class="table-item table-action">
-					<Button v-if="gameStatus === 0" class="table-button" type="primary" @click="changeGameStatusRequest(game, 1)">发布</Button>
-					<Button v-else-if="gameStatus === 1" class="table-button" type="primary" @click="editGame(game)">编辑</Button>
-					<Button v-if="gameStatus === 1" class="table-button" type="success" @click="settledDrawer(game)">结算</Button>
-					<Button v-if="gameStatus === 3" class="table-button" type="primary" @click="changeGameStatusRequest(game, 1)">发布</Button>
-					<Button v-if="gameStatus === 1" class="table-button" type="error"  @click="changeGameStatusRequest(game, 3)">流局</Button>
+					<Button v-if="gameStatus === 0" class="table-button" type="primary" ghost @click="changeGameStatusRequest(game, 1)">发布</Button>
+					<Button v-else-if="gameStatus === 1" class="table-button" type="primary" ghost @click="editGame(game)">编辑</Button>
+					<Button v-if="gameStatus === 1" class="table-button" type="success" ghost @click="settledDrawer(game)">结算</Button>
+					<Button v-if="gameStatus === 3" class="table-button" type="primary" ghost @click="changeGameStatusRequest(game, 1)">发布</Button>
+					<Button v-if="gameStatus === 1" class="table-button" type="error"  ghost @click="changeGameStatusRequest(game, 3)">流局</Button>
 				</div>
 				<Drawer
 						title="结算比赛"
@@ -47,8 +47,8 @@
 						</div>
 					</CheckboxGroup>
 					<div class="edit-button-bg">
-						<Button class="edit-button" @click="settleGameRequest"  type="success">结算</Button>
-						<Button class="edit-button" @click="showSettleDrawer = !showSettleDrawer" type="error">取消</Button>
+						<Button class="edit-button" ghost @click="settleGameRequest"  type="success">结算</Button>
+						<Button class="edit-button" ghost @click="showSettleDrawer = !showSettleDrawer" type="error">取消</Button>
 					</div>
 				</Drawer>
 				<!--Edit game drawer start-->
@@ -103,12 +103,12 @@
 						</div>
 					</div>
 					<div class="edit-button-bg">
-						<Button class="edit-button" @click="pushBetOption()" type="primary">添加</Button>
-						<Button class="edit-button" @click="popBetOption()" type="warning">删除</Button>
+						<Button class="edit-button" ghost @click="pushBetOption()" type="primary">添加</Button>
+						<Button class="edit-button" ghost @click="popBetOption()" type="warning">删除</Button>
 					</div>
 					<div class="edit-button-bg">
-						<Button class="edit-button" @click="updateGameRequest(editModel)" type="success">更新</Button>
-						<Button class="edit-button" @click="showEditDrawer = !showEditDrawer" type="error">取消</Button>
+						<Button class="edit-button" ghost @click="updateGameRequest(editModel)" type="success">更新</Button>
+						<Button class="edit-button" ghost @click="showEditDrawer = !showEditDrawer" type="error">取消</Button>
 					</div>
 				</Drawer>
 				<!--Edit game drawer end-->
@@ -169,11 +169,13 @@
 	}
 
 	.manage-status-bg {
+		background-color: white;
+		padding: 10px;
 		display: flex;
 		flex-direction: row;
-		justify-content: space-evenly;
+		justify-content: center;
 		align-content: center;
-		margin: 20px;
+		margin: 20px 0;
 	}
 
 	.status-str {
@@ -183,9 +185,8 @@
 	}
 
 	.status-button {
-		flex-grow: 1;
-		max-width: 200px;
-		min-width: 100px;
+		border-radius: 50px;
+		margin: 0 10px;
 	}
 
 	.edit-drawer-bg {
