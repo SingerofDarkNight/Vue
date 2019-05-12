@@ -83,6 +83,7 @@ export default class AdminGameList extends Vue {
     }
 
     this.gamesList = listGameReply.getGamesList();
+    this.gamesList.reverse();
   }
 
   private async changeGameStatusRequest(game: Game, type: number) {

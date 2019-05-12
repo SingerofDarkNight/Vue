@@ -18,7 +18,7 @@
 				<div class="table-item">操作</div>
 			</div>
 			<div v-for="game in gamesList" class="table-data" :key="game.id">
-				<div class="table-item">{{game.getId()}} {{game.getStatus()}}</div>
+				<div class="table-item">{{game.getId()}}</div>
 				<div class="table-item">{{game.getName()}}</div>
 				<div class="table-item">{{new Date(game.getEndTimeMs()).toLocaleDateString()}}</div>
 				<div class="table-item">{{game.getNormalUserVisible() | tof}}</div>
