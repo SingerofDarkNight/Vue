@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="black-btn">
-                <Button type="success" long>我的竞猜</Button>
+                <Button type="success" to="/stat" long>我的竞猜</Button>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-    
+
 }
 </script>
 

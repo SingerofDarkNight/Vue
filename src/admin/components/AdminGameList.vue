@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<div class="manage-status-bg">
-				<Button class="status-button" type="info" :ghost="ghost[0]" @click="changeGameListRequest(0)">草稿</Button>
-				<Button class="status-button" type="success" :ghost="ghost[1]" @click="changeGameListRequest(1)">发布</Button>
-				<Button class="status-button" type="warning" :ghost="ghost[2]" @click="changeGameListRequest(2)">结算</Button>
-				<Button class="status-button" type="error" :ghost="ghost[3]" @click="changeGameListRequest(3)">流局</Button>
+				<Button class="stat-button" type="info" :ghost="ghost[0]" @click="changeGameListRequest(0)">草稿</Button>
+				<Button class="stat-button" type="success" :ghost="ghost[1]" @click="changeGameListRequest(1)">发布</Button>
+				<Button class="stat-button" type="warning" :ghost="ghost[2]" @click="changeGameListRequest(2)">结算</Button>
+				<Button class="stat-button" type="error" :ghost="ghost[3]" @click="changeGameListRequest(3)">流局</Button>
 		</div>
 		<!-- <div class="status-str">
 			{{this.statusStr[this.gameStatus]}}
@@ -192,7 +192,7 @@
 		font-weight: bold;
 	}
 
-	.status-button {
+	.stat-button {
 		border-radius: 50px;
 		margin: 0 10px;
 	}

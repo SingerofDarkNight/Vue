@@ -4,6 +4,7 @@ import BetHomePage from './betting/BetHomePage.vue'
 import About from './views/About.vue'
 import ManagePage from './admin/ManagePage.vue'
 import CreatePage from './admin/CreatePage.vue'
+import StatPage from './betting/stat/StatPage.vue'
 
 Vue.use(Router)
 
@@ -19,6 +20,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About
+    },
+    {
+      path: '/stat',
+      name: 'stat',
+      component: StatPage
     },
     {
       path: '/admin',
