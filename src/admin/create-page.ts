@@ -2,7 +2,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import SideDrawer from "@/admin/components/drawer.vue"
 import {ApiService} from '@/common/api.service';
-import {AdminGameRequest, AdminGameReply, Game} from '@/proto/bbuhot/service/game_pb'
+import {AdminGameRequest, AdminGameReply, Game} from '@/proto/bbuhot/service/game_pb';
 
 @Component({
   components: {
@@ -15,6 +15,8 @@ export default class CreatePage extends Vue {
   private formValidate = {
     name: '',
     desc: '',
+    imgUrl1: '',
+    imgUrl2: '',
     limit: '',
     lowest: '',
     highest:'',
@@ -63,6 +65,8 @@ export default class CreatePage extends Vue {
     ]
   };
 
+  logoList: Array<any> = new  Array<any>();
+
   private ruleValidate: Object = new Object({
     name: [
       {required: true, message: '名称不能为空', trigger: 'blur'}
@@ -84,7 +88,6 @@ export default class CreatePage extends Vue {
     // ],
   });
 
-  private initForm :any;
   private pushBetOption() {
     this.formValidate.betOptionList.push({
       name: '',
@@ -96,13 +99,21 @@ export default class CreatePage extends Vue {
     this.formValidate.betOptionList.pop();
   }
 
+  private convertDesc(desc: string, imgUrl1: string, imgUrl2: string): string {
+    var res = '{"desc":"' + desc + '",' +
+        '"img1":"'+ imgUrl1 + '",' +
+        '"img2":"' + imgUrl2 + '"}';
+    return res;
+  }
+
   private async createGameRequest() {
     const adminGameRequest: AdminGameRequest = new AdminGameRequest();
 
     const game: Game = new Game();
     game.setId(-1);
     game.setName(this.formValidate.name.toString());
-    game.setDescription(this.formValidate.desc.toString());
+    const desc = this.convertDesc(this.formValidate.desc, this.formValidate.imgUrl1, this.formValidate.imgUrl2);
+    game.setDescription(desc);
     game.setBetOptionLimit(Number(this.formValidate.limit));
     game.setBetAmountLowest(Number(this.formValidate.lowest));
     game.setBetAmountHighest(Number(this.formValidate.highest));
@@ -126,5 +137,8 @@ export default class CreatePage extends Vue {
     if (adminGameReply.hasAuthErrorCode()) {
       // TODO: deal with error.
     }
+  }
+
+  mounted() {
   }
 }

@@ -43,6 +43,7 @@
       }
 
       this.gamesList = listGameReply.getGamesList();
+      this.gamesList.reverse();
     }
 
     async mounted() {

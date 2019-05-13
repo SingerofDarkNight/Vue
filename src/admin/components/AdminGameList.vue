@@ -68,6 +68,14 @@
 							<Input v-model="editModel.desc" size="large"  class="edit-item-input" placeholder="输入名称" style="width: 300px" />
 						</div>
 						<div class="edit-item-bg">
+							<div class="edit-item-title">图标1</div>
+							<Input v-model="editModel.imgUrl1" size="large"  class="edit-item-input" placeholder="输入图标1" style="width: 300px" />
+						</div>
+						<div class="edit-item-bg">
+							<div class="edit-item-title">图标2</div>
+							<Input v-model="editModel.imgUrl2" size="large"  class="edit-item-input" placeholder="输入图标2" style="width: 300px" />
+						</div>
+						<div class="edit-item-bg">
 							<div class="edit-item-title">普通用户是否可见</div>
 							<div class="edit-item-checkbox-bg">
 								<Checkbox class="edit-item-checkbox" v-model="editModel.visible" size="large">

@@ -1,9 +1,12 @@
 import {Game} from "@/proto/bbuhot/service/game_pb";
+import {DescModel} from "@/admin/components/desc-model";
 
 export class EditGameModel {
   public id: number;
   public name: string;
   public desc: string;
+  public imgUrl1: string;
+  public imgUrl2: string;
   public visible: boolean;
   public status: number;
   public statusStr: string;
@@ -21,7 +24,12 @@ export class EditGameModel {
   constructor(game?: Game) {
     this.id = game ? game.getId()! : -1;
     this.name = game ? game.getName()! : "";
-    this.desc = game ? game.getDescription()! : "";
+    const defaultStr = '{ "desc": "", "img1": "", "img2": ""}';
+    const descStr = game ? game.getDescription()! : defaultStr;
+    const descModel: DescModel = new DescModel(descStr);
+    this.desc = descModel.desc;
+    this.imgUrl1 = descModel.imgUrl1;
+    this.imgUrl2 = descModel.imgUrl2;
     this.visible = game ? game.getNormalUserVisible()! : false;
     this.status = game ? game.getStatus()! : Game.Status.DRAFT;
     let statusStr = "草稿";

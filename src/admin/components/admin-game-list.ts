@@ -63,6 +63,13 @@ export default class AdminGameList extends Vue {
     this.editModel.bettingOptionList.pop();
   }
 
+  private convertDesc(desc: string, imgUrl1: string, imgUrl2: string): string {
+    var res = '{"desc":"' + desc + '",' +
+        '"img1":"'+ imgUrl1 + '",' +
+        '"img2":"' + imgUrl2 + '"}';
+    return res;
+  }
+
   // request
   private changeGameListRequest(idx: number) {
     this.gameStatus = idx;
@@ -123,7 +130,8 @@ export default class AdminGameList extends Vue {
     const game: Game = new Game();
     game.setId(editGame.id);
     game.setName(editGame.name);
-    game.setDescription(editGame.desc);
+    const desc = this.convertDesc(editGame.desc, editGame.imgUrl1, editGame.imgUrl2);
+    game.setDescription(desc);
     game.setNormalUserVisible(editGame.visible);
     game.setBetOptionLimit(editGame.limit);
     game.setBetAmountLowest(editGame.lowest);

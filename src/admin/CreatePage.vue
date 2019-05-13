@@ -14,6 +14,12 @@
 				<FormItem class="form-item" label="描述" prop="desc">
 					<Input class="form-input" placeholder="输入描述" v-model="formValidate.desc"/>
 				</FormItem>
+				<FormItem class="form-item" label="图标1">
+					<Input class="form-input" placeholder="(可选)输入战队1图标 url" v-model="formValidate.imgUrl1"/>
+				</FormItem>
+				<FormItem class="form-item" label="图标2">
+					<Input class="form-input" placeholder="(可选)输入战队2图标 url" v-model="formValidate.imgUrl2"/>
+				</FormItem>
 				<FormItem class="form-item" label="最大注数" prop="limit">
 					<Input class="form-input" placeholder="输入最大下注数" v-model="formValidate.limit"/>
 				</FormItem>

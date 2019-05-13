@@ -3,6 +3,7 @@ import { Component, Prop } from 'vue-property-decorator'
 import {ApiService} from '@/common/api.service';
 import {ListGameReply, ListGameRequest, Game, BetRequest, BetReply} from '@/proto/bbuhot/service/game_pb';
 import { AuthReply } from '@/proto/bbuhot/service/auth_pb';
+import {DescModel} from "@/admin/components/desc-model";
 
 @Component({})
 export default class GameList extends Vue {
@@ -11,6 +12,8 @@ export default class GameList extends Vue {
 
 	showDrawer: Boolean = false;
 	moneyList: Array<number> = new Array();
+	descModel: DescModel = new DescModel("{}");
+	showImg: Boolean = false;
 
 	mounted() {
 		this.updateBetDataUsingGame();
@@ -18,8 +21,10 @@ export default class GameList extends Vue {
 
 	private updateBetDataUsingGame() : void {
 		this.moneyList = new Array<number>(this.game!.getBettingOptionsList().length);
+    this.descModel = new DescModel(this.game!.getDescription()!);
+    this.showImg = this.descModel.imgUrl1.length > 0 && this.descModel.imgUrl2.length > 0;
 
-		this.game!.getBetsList().forEach(bet => 
+		this.game!.getBetsList().forEach(bet =>
 			this.moneyList[bet.getBettingOptionId()!] = bet.getMoney()!
 		);
 	}
