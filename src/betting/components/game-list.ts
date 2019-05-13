@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { Component, Prop } from 'vue-property-decorator'
 import {ApiService} from '@/common/api.service';
-import {ListGameReply, ListGameRequest, Game, BetRequest, BetReply} from '@/proto/bbuhot/service/game_pb';
-import { AuthReply } from '@/proto/bbuhot/service/auth_pb';
+import {ListGameReply, ListGameRequest, Game, BetRequest, BetReply} from 'bbuhot-ts-proto/proto/bbuhot/service/game_pb';
+import { AuthReply } from 'bbuhot-ts-proto/proto/bbuhot/service/auth_pb';
 import {DescModel} from "@/admin/components/desc-model";
 
 @Component({})

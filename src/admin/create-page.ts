@@ -2,7 +2,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import SideDrawer from "@/admin/components/drawer.vue"
 import {ApiService} from '@/common/api.service';
-import {AdminGameRequest, AdminGameReply, Game} from '@/proto/bbuhot/service/game_pb';
+import {AdminGameRequest, AdminGameReply, Game} from 'bbuhot-ts-proto/proto/bbuhot/service/game_pb';
 
 @Component({
   components: {

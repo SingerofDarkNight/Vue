@@ -1,4 +1,4 @@
-import {Game} from "@/proto/bbuhot/service/game_pb";
+import {Game} from "bbuhot-ts-proto/proto/bbuhot/service/game_pb";
 import {DescModel} from "@/admin/components/desc-model";
 
 export class EditGameModel {

@@ -20,7 +20,7 @@
   import headPic from '../components/headPic.vue';
   import GameList from './components/GameList.vue';
   import {ApiService} from '../common/api.service';
-  import {ListGameReply, ListGameRequest, Game, BetRequest, BetReply} from '../proto/bbuhot/service/game_pb';
+  import {ListGameReply, ListGameRequest, Game, BetRequest, BetReply} from 'bbuhot-ts-proto/proto/bbuhot/service/game_pb';
 
   @Component({
     components: {

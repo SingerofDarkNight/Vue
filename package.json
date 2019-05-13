@@ -11,6 +11,7 @@
     "@cnamts/vue-cli-plugin-proxy": "^2.2.1",
     "@types/google-protobuf": "^3.2.7",
     "axios": "^0.18.0",
+    "bbuhot-ts-proto": "^0.0.1",
     "css-loader": "^2.1.1",
     "google-protobuf": "^3.7.1",
     "iview": "^3.4.1",

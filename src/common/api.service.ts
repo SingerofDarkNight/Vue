@@ -1,12 +1,12 @@
 import axios from 'axios';
 import {Message} from 'google-protobuf';
-import {AuthReply, AuthRequest} from '../proto/bbuhot/service/auth_pb';
+import {AuthReply, AuthRequest} from 'bbuhot-ts-proto/proto/bbuhot/service/auth_pb';
 import {
   ListGameReply, ListGameRequest,
   AdminGameReply, AdminGameRequest,
   AdminGameStatusReply, AdminGameStatusRequest,
   BetReply, BetRequest
-} from '../proto/bbuhot/service/game_pb';
+} from 'bbuhot-ts-proto/proto/bbuhot/service/game_pb';
 
 export class ApiService {
 

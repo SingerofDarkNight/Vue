@@ -11,7 +11,7 @@ import {
   Game,
   ListGameReply,
   ListGameRequest
-} from '@/proto/bbuhot/service/game_pb'
+} from 'bbuhot-ts-proto/proto/bbuhot/service/game_pb'
 
 
 @Component({
